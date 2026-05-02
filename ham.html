@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>I LOVE YOU</title>
+<title>Heart Music GitHub Fix</title>
 
 <style>
 body {
@@ -13,6 +13,7 @@ body {
     align-items: center;
     height: 100vh;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .wrapper {
@@ -26,16 +27,6 @@ body {
     font-family: monospace;
     font-size: 12px;
     line-height: 12px;
-    text-align: center;
-}
-
-/* message */
-#status {
-    position: absolute;
-    bottom: 20px;
-    color: white;
-    font-family: Arial;
-    font-size: 14px;
 }
 </style>
 </head>
@@ -46,15 +37,13 @@ body {
     <div id="heart"></div>
 </div>
 
-<div id="status">Click anywhere to start.</div>
-
 <audio id="music" loop>
     <source src="song.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 
-/* ================= HEART ================= */
+/* HEART */
 const msg = "I love you nouryyy ";
 let index = 0;
 let output = "";
@@ -76,47 +65,36 @@ for (let y = 1.5; y > -1.5; y -= 0.05) {
 
 document.getElementById("heart").innerText = output;
 
-/* ================= MUSIC ================= */
+/* MUSIC + HEARTBEAT */
 const audio = document.getElementById("music");
 const wrapper = document.getElementById("wrapper");
-const status = document.getElementById("status");
 
 let started = false;
 
-/* beat effect (simple volume simulation) */
 function beat() {
-    let scale = 1 + Math.random() * 0.08; // fake heartbeat
+    let scale = 1 + Math.random() * 0.08;
     wrapper.style.transform = `scale(${scale})`;
 }
 
-/* animation loop */
 function loop() {
     if (!started) return;
-
     beat();
     setTimeout(loop, 120);
 }
 
-/* start music */
-function start() {
+/* GitHub-safe start */
+function startEverything() {
     if (started) return;
-
     started = true;
 
-    audio.play()
-        .then(() => {
-            status.innerText = "Love You NourYYYY";
-            loop();
-        })
-        .catch((err) => {
-            status.innerText = "❌ Audio blocked or file not working";
-            console.log(err);
-        });
+    audio.play().catch(() => {});
+    loop();
 }
 
-/* user interaction required */
-window.addEventListener("click", start);
-window.addEventListener("touchstart", start);
+/* ANY interaction starts it */
+document.body.addEventListener("click", startEverything);
+document.body.addEventListener("touchstart", startEverything);
+document.body.addEventListener("keydown", startEverything);
 
 </script>
 
