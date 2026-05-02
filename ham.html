@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>I LOVE YOU</title>
+
+<style>
+body {
+    margin: 0;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.wrapper {
+    transform: scale(1);
+    transition: transform 0.08s linear;
+}
+
+#heart {
+    white-space: pre;
+    color: #ff4d8d;
+    font-family: monospace;
+    font-size: 12px;
+    line-height: 12px;
+    text-align: center;
+}
+
+/* message */
+#status {
+    position: absolute;
+    bottom: 20px;
+    color: white;
+    font-family: Arial;
+    font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrapper" id="wrapper">
+    <div id="heart"></div>
+</div>
+
+<div id="status">Click anywhere to start.</div>
+
+<audio id="music" loop>
+    <source src="song.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+/* ================= HEART ================= */
+const msg = "I love you nouryyy ";
+let index = 0;
+let output = "";
+
+for (let y = 1.5; y > -1.5; y -= 0.05) {
+    for (let x = -1.5; x < 1.5; x += 0.025) {
+
+        let formula = Math.pow(x*x + y*y - 1, 3) - x*x*y*y*y;
+
+        if (formula <= 0) {
+            output += msg[index % msg.length];
+            index++;
+        } else {
+            output += " ";
+        }
+    }
+    output += "\n";
+}
+
+document.getElementById("heart").innerText = output;
+
+/* ================= MUSIC ================= */
+const audio = document.getElementById("music");
+const wrapper = document.getElementById("wrapper");
+const status = document.getElementById("status");
+
+let started = false;
+
+/* beat effect (simple volume simulation) */
+function beat() {
+    let scale = 1 + Math.random() * 0.08; // fake heartbeat
+    wrapper.style.transform = `scale(${scale})`;
+}
+
+/* animation loop */
+function loop() {
+    if (!started) return;
+
+    beat();
+    setTimeout(loop, 120);
+}
+
+/* start music */
+function start() {
+    if (started) return;
+
+    started = true;
+
+    audio.play()
+        .then(() => {
+            status.innerText = "Love You NourYYYY";
+            loop();
+        })
+        .catch((err) => {
+            status.innerText = "❌ Audio blocked or file not working";
+            console.log(err);
+        });
+}
+
+/* user interaction required */
+window.addEventListener("click", start);
+window.addEventListener("touchstart", start);
+
+</script>
+
+</body>
+</html>
